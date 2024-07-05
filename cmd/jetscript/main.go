@@ -26,6 +26,7 @@ func initApp() *cli.App {
 			pushCommand(),
 			pullCommand(),
 			docsCommand(),
+			initCommand(),
 		}}
 
 	return app

@@ -1,12 +1,10 @@
 package lang
 
+import "github.com/redpanda-data/benthos/v4/public/bloblang"
+
 type (
 	Environment interface {
-		Parse(script string) (Executor, error)
+		Parse(script string) (*bloblang.Executor, error)
 		DumpComponents(outdir string) error
-	}
-	Executor interface {
-		Query(val any) (any, error)
-		Overlay(val any, onto *any) error
 	}
 )

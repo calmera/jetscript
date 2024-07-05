@@ -1,6 +1,9 @@
 package nats
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"github.com/redpanda-data/benthos/v4/public/service"
+)
 
 func encodeData(data any) ([]byte, error) {
 	if data == nil {
@@ -8,6 +11,8 @@ func encodeData(data any) ([]byte, error) {
 	}
 
 	switch v := data.(type) {
+	case *service.Message:
+		return v.AsBytes()
 	case string:
 		return []byte(v), nil
 	case []byte:

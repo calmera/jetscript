@@ -44,6 +44,14 @@ func pushCommand() *cli.Command {
 			contextName := c.String("context")
 			bucket := c.String("bucket")
 
+			if !c.IsSet("bucket") {
+				bucket = "JETSCRIPT"
+			}
+
+			if !c.IsSet("context") {
+				contextName = natscontext.SelectedContext()
+			}
+
 			nc, js, err := utils.ConnectJetstream(contextName)
 			if err != nil {
 				return err

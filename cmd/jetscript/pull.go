@@ -49,6 +49,14 @@ func pullCommand() *cli.Command {
 			bucket := c.String("bucket")
 			overwrite := c.Bool("overwrite")
 
+			if !c.IsSet("bucket") {
+				bucket = "JETSCRIPT"
+			}
+
+			if !c.IsSet("context") {
+				contextName = natscontext.SelectedContext()
+			}
+
 			nc, js, err := utils.ConnectJetstream(contextName)
 			if err != nil {
 				return err

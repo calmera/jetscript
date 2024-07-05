@@ -1,0 +1,9 @@
+# just convert the incoming data to uppercase and send it to the NATS subject "my.nats.subject"
+
+let my_headers = {
+  "my_header": "my_value"
+}.as_headers()
+
+root = content().as_msg(
+  subject: "my.nats.subject",
+  headers: $my_headers)

@@ -8,11 +8,9 @@ import (
 	"github.com/redpanda-data/benthos/v4/public/service"
 )
 
-func Process(exec Executor, msg *nats.Msg) ([]*nats.Msg, error) {
-	m := ToBenthosMessage(msg)
-
-	var result any
-	if err := exec.Overlay(m, &result); err != nil {
+func Process(exec *bloblang.Executor, msg *nats.Msg) ([]*nats.Msg, error) {
+	res, err := ToBenthosMessage(msg).BloblangQueryValue(exec)
+	if err != nil {
 		if !errors.Is(err, bloblang.ErrRootDeleted) {
 			return nil, err
 		}
@@ -20,11 +18,11 @@ func Process(exec Executor, msg *nats.Msg) ([]*nats.Msg, error) {
 		return nil, nil
 	}
 
-	if result == nil {
+	if res == nil {
 		return nil, nil
 	}
 
-	switch res := result.(type) {
+	switch res := res.(type) {
 	case *nats.Msg:
 		return []*nats.Msg{res}, nil
 	default:

@@ -16,13 +16,11 @@ import (
 
 func execCommand() *cli.Command {
 	return &cli.Command{
-		Name:  "exec",
-		Usage: "execute jetscript inline",
+		Name:      "exec",
+		Usage:     "execute jetscript inline",
+		Args:      true,
+		ArgsUsage: "the path of the jetscript in the object store",
 		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:  "path",
-				Usage: "the path in the object store to the script",
-			},
 			&cli.StringFlag{
 				Name:  "subject",
 				Usage: "the subject to consume from",
@@ -39,7 +37,7 @@ func execCommand() *cli.Command {
 			},
 		},
 		Action: func(c *cli.Context) error {
-			if !c.IsSet("path") {
+			if c.NArg() == 0 {
 				return fmt.Errorf("path is required")
 			}
 
@@ -47,10 +45,18 @@ func execCommand() *cli.Command {
 				return fmt.Errorf("subject is required")
 			}
 
-			scriptPath := c.String("script")
+			scriptPath := c.Args().First()
 			subject := c.String("subject")
 			contextName := c.String("context")
 			bucket := c.String("bucket")
+
+			if !c.IsSet("bucket") {
+				bucket = "JETSCRIPT"
+			}
+
+			if !c.IsSet("context") {
+				contextName = natscontext.SelectedContext()
+			}
 
 			nc, js, err := utils.ConnectJetstream(contextName)
 			if err != nil {

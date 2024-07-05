@@ -18,12 +18,12 @@ type blobEnvironment struct {
 	be *bloblang.Environment
 }
 
-func (e *blobEnvironment) Parse(script string) (Executor, error) {
+func (e *blobEnvironment) Parse(script string) (*bloblang.Executor, error) {
 	be, err := e.be.Parse(script)
 	if err != nil {
 		return nil, err
 	}
-	return wrapExecuter(be), nil
+	return be, nil
 }
 
 func (e *blobEnvironment) DumpComponents(outdir string) error {
