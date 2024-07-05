@@ -98,7 +98,7 @@ func (e *blobEnvironment) DumpComponents(outdir string) error {
 	})
 
 	// write the index to a file
-	f, err := os.Create(outdir + "/index.json")
+	f, err := os.Create(outdir + "/__index.json")
 	if err != nil {
 		return fmt.Errorf("failed to create index file: %w", err)
 	}
