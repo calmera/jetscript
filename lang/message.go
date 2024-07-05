@@ -25,6 +25,8 @@ func Process(exec *bloblang.Executor, msg *nats.Msg) ([]*nats.Msg, error) {
 	switch res := res.(type) {
 	case *nats.Msg:
 		return []*nats.Msg{res}, nil
+	case []*nats.Msg:
+		return res, nil
 	default:
 		return nil, errors.New("expected result to be a NATS message")
 	}
