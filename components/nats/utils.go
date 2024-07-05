@@ -5,6 +5,11 @@ import (
 	"github.com/redpanda-data/benthos/v4/public/service"
 )
 
+type Header struct {
+	Key    string
+	Values []string
+}
+
 func encodeData(data any) ([]byte, error) {
 	if data == nil {
 		return nil, nil
